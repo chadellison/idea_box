@@ -1,8 +1,14 @@
 <h1>Welcome to Idea Box</h1>
-<div class="ideas">
-  <% @ideas.each do |idea| %>
-    <h2><%= idea.title %></h2>
-    <p><%= idea.body %></p>
-    <p>quality: <%= idea.quality %></p>
+<div class="new-idea">
+  <%= form_for(Idea.new, url: {action: "create"}, remote: true) do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <%= f.label :body %>
+    <%= f.text_field :body %>
+    <%= f.submit "Save" %>
   <% end %>
 </div>
+
+<ul id="ideas">
+  <%= render @ideas %>
+</ul>

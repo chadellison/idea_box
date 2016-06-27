@@ -8,6 +8,6 @@ RSpec.feature "User can see ideas" do
 
     expect(page).to have_content "great things"
     expect(page).to have_content "things that are great"
-    expect(page).to have_content "quality: swill"
+    expect(page).to have_content "Quality: swill"
   end
 end

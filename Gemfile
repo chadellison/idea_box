@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# gem 'responders'
+gem 'responders'
 # gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 
 ruby '2.3.0'
