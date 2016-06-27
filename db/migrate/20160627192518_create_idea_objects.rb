@@ -1,0 +1,9 @@
+class CreateIdeaObjects < ActiveRecord::Migration
+  def change
+    create_table :ideas do |t|
+      t.string :title
+      t.string :body
+      t.string :quality, default: :swill
+    end
+  end
+end
