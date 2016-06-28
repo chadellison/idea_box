@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $(".remove").on("click", function() {
+  $("#ideas").on("click", ".remove", function(events) {
     $(this).closest("div").fadeOut()
   });
 });
