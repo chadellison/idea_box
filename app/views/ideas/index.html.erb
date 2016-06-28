@@ -1,6 +1,6 @@
 <h1>Welcome to Idea Box</h1>
 <div class="new-idea">
-  <%= form_for(Idea.new, url: {action: "create"}, remote: true) do |f| %>
+  <%= form_for(@idea, url: { action: "create" }, remote: true) do |f| %>
     <%= f.label :title %>
     <%= f.text_field :title %>
     <%= f.label :body %>
