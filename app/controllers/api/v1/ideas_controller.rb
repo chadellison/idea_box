@@ -1,7 +1,10 @@
-class IdeasController < ApplicationController
+class Api::V1::IdeasController < Api::ApiController
+  respond_to :json
+
   def index
-    @ideas = Idea.order(created_at: :desc)
-    @idea = Idea.new
+    # @ideas = Idea.order(created_at: :desc)
+    # @idea = Idea.new
+    respond_with Idea.order(created_at: :desc)
   end
 
   def create

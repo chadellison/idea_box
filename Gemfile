@@ -19,7 +19,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   gem 'vcr'
   gem 'webmock'
-  # gem 'selenium-webdriver' < -- for ajax
+  gem 'selenium-webdriver', '~> 2.53.4'
   gem 'byebug'
   gem 'capybara'
   gem 'launchy'
