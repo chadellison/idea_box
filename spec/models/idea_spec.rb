@@ -34,4 +34,29 @@ RSpec.describe Idea do
       expect(Idea.find(idea.id).quality).to eq "swill"
     end
   end
+
+  context "filter" do
+    it "returns only ideas that match a text" do
+      idea1 = Idea.create(title: "jones", body: "about jones")
+      idea2 = Idea.create(title: "abc", body: "123")
+
+      expect(Idea.filter("one")).to eq [idea1]
+    end
+
+    it "returns all ideas if no argument is given" do
+      Idea.destroy_all
+      idea1 = Idea.create(title: "jones", body: "about jones")
+      idea2 = Idea.create(title: "abc", body: "123")
+
+      expect(Idea.filter("")).to eq [idea2, idea1]
+    end
+
+    it "returns ideas that match in the body or the title" do
+      idea1 = Idea.create(title: "jones", body: "about jones")
+      idea2 = Idea.create(title: "abc", body: "123")
+
+      expect(Idea.filter("c")).to eq [idea2]
+      expect(Idea.filter("1")).to eq [idea2]
+    end
+  end
 end
