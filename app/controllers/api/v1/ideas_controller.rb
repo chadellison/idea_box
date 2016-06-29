@@ -19,13 +19,16 @@ class Api::V1::IdeasController < Api::ApiController
 
   def update
     idea = Idea.find(params[:id])
-    # idea.update_quality(params[:quality])
-    respond_with idea.update_quality(params[:quality])
+    if params[:quality]
+      respond_with idea.update_quality(params[:quality])
+    else
+      respond_with idea.update(idea_params)
+    end
   end
 
   private
 
     def idea_params
-      params.require(:post).permit(:title, :body)
+      params.require(:idea).permit(:title, :body)
     end
 end

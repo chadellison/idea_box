@@ -32,18 +32,27 @@ RSpec.describe Api::V1::IdeasController do
 
   it "creates an idea" do
     expect(Idea.count).to eq 0
-    post :create, format: :json, post: { title: "Idea", body: "this idea"}
+    post :create, format: :json, idea: { title: "Idea", body: "this idea"}
     expect(response).to have_http_status(:success)
 
     expect(Idea.count).to eq 1
     expect(Idea.last.title).to eq "Idea"
   end
 
-  it "updates an idea" do
+  it "updates an idea's quality" do
     idea = Idea.create(title: "yoyo", body: "this is great")
     expect(idea.quality).to eq "swill"
     patch :update, format: :json, id: idea.id, quality: 1
     expect(response).to have_http_status(:success)
     expect(Idea.find(idea.id).quality).to eq "plausible"
+  end
+
+  it "updates an idea" do
+    idea = Idea.create(title: "yoyo", body: "boom")
+    patch :update, format: :json, id: idea.id,
+      idea: { title: "jones", body: "not-boom" }
+    expect(response).to have_http_status(:success)
+    expect(Idea.find(idea.id).title).to eq "jones"
+    expect(Idea.find(idea.id).body).to eq "not-boom"
   end
 end

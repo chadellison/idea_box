@@ -3,30 +3,16 @@ require "rails_helper"
 RSpec.feature "user can thumbs up an idea" do
   scenario "user sees adjusted idea quality" do
     skip
-    idea1 = Idea.create(title: "my idea", body: "the body of my idea")
-    idea2 = Idea.create(title: "another idea", body: "a thing!")
 
     visit root_path
 
-    within("##{idea1.id}") do
-      expect(page).to have_content "Quality: swill"
-    end
+    fill_in "title", with: "my idear"
+    fill_in "body", with: "this thing"
+    click_on "Save"
 
-    within("##{idea2.id}") do
-      expect(page).to have_content "Quality: swill"
-    end
+    click_on "thumbs up"
 
-    within("##{idea2.id}") do
-      click_on "thumbs up"
-    end
-
-    within("##{idea2.id}") do
-      expect(page).to have_content "Quality: plausible"
-    end
-
-    within("##{idea1.id}") do
-      expect(page).to have_content "Quality: swill"
-    end
+    expect(page).to have_content "Quality: plausible"
   end
 
   scenario "ideas cannot be better than genius" do
