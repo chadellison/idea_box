@@ -32,7 +32,7 @@ RSpec.describe Api::V1::IdeasController do
 
   it "creates an idea" do
     expect(Idea.count).to eq 0
-    post :create, format: :json, post: { title: "Idea", body: "this idea"}
+    post :create, format: :json, idea: { title: "Idea", body: "this idea"}
     expect(response).to have_http_status(:success)
 
     expect(Idea.count).to eq 1

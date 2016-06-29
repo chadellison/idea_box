@@ -21,9 +21,9 @@ $(document).ready(function(){
   function renderIdeas(ideas) {
     $.each(ideas, function(index, idea){
       $('#ideas').append(
-        "<div id='" + idea.id + "'><h3>"
+        "<div id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
         + idea.title + "</h3><p>"
-        + idea.body + "</p><p>"
+        + idea.body + "</p><p></div>"
         + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
         + buttons
         + "</p></div>"
@@ -31,9 +31,30 @@ $(document).ready(function(){
     })
   }
 
+  // searchbox = document.getElementById('searchboxID');
+    // edit = document.getElementByClass("edit")
+    // edit.addEventListener('blur', function() {
+    // var input = this.value;
+    // });
+
+  $("#ideas").on("blur", ".edit", function(){
+    var title = $(this).children("h3").text()
+    var body = $(this).children("p").text()
+    // var quality = $(this).siblings("div").text()
+    var id = $(this).parent().attr("id")
+    $.ajax({
+      type: "PATCH",
+      url: "/api/v1/ideas/" + id + ".json",
+      data: { idea: { title: title, body: body }},
+      success: function(){
+
+      }
+    })
+  })
+
   function createIdea(idea){
     $("#ideas").prepend(
-      "<div id='" + idea.id + "'><h3>"
+      "<div id='" + idea.id + "' class='edit' contenteditable='true'><h3>"
       + idea.title + "</h3><p>"
       + idea.body + "</p><p>"
       + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
@@ -54,11 +75,11 @@ $(document).ready(function(){
   $("#submit").on("click", function(){
     var title      = $("#title").val()
     var body       = $("#body").val()
-    var idea = { post: { title: title, body: body } }
+    var idea = { title: title, body: body }
     $.ajax({
       type: "POST",
       url: "/api/v1/ideas.json",
-      data: idea,
+      data: {idea: idea},
       success: function(idea){
         createIdea(idea)
       }
@@ -95,7 +116,7 @@ $(document).ready(function(){
           url: "/api/v1/ideas/" + id + ".json",
           success: function(idea) {
             var quality = idea.quality
-            $("#" + id).children("div").text("Quality: " + quality)
+            $("#" + id).children("div").last().text("Quality: " + quality)
           }
         })
       }
