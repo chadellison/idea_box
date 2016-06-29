@@ -1,18 +1,23 @@
 <h1>Welcome To Idea Box</h1>
 <p>Think outside the box after putting your ideas in one</p>
 
-<div id="ideas">
-
+<div class="new-idea">
+    <input class="idea" id="title" placeholder="title" type="text">
+    <input class="idea" id="body" placeholder="idea" type="text">
+    <input id="submit" type="button" name="submit" value="Save">
 </div>
 
+<div id="ideas"></div>
+
 <script>
+$(document).ready(function(){
   $.ajax({
-    type: 'GET',
-    url: '/api/v1/ideas.json',
+    type: "GET",
+    url: "/api/v1/ideas.json",
     success: function(ideas) {
       $.each(ideas, function(index, idea){
         $('#ideas').append(
-          "<div id=''><h3>"
+          "<div id='" + idea.id + "'><h3>"
           + idea.title + "</h3><p>"
           + idea.body + "</p><p>"
           + 'Quality: ' + idea.quality + "</p></div>"
@@ -20,4 +25,25 @@
       })
     },
   });
+  $("#submit").on("click", function(){
+    var title      = $("#title").val()
+    var body       = $("#body").val()
+    var idea = { post: { title: title, body: body } }
+    $.ajax({
+      type: "POST",
+      url: "/api/v1/ideas.json",
+      data: idea,
+      success: function(idea){
+        $("#ideas").prepend(
+          "<div id='" + idea.id + "'><h3>"
+          + idea.title + "</h3><p>"
+          + idea.body + "</p><p>"
+          + 'Quality: ' + idea.quality + "</p></div>"
+        )
+        $("input.idea").val(null)
+      }
+    })
+  })
+})
+
 </script>
