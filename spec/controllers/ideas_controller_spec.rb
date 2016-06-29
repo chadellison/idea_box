@@ -9,34 +9,41 @@ RSpec.describe Api::V1::IdeasController do
     ideas = JSON.parse(response.body, symbolize_names: true)
     expect(ideas.first[:title]).to eq "rocks"
     expect(ideas.last[:body]).to eq "beautimous"
-    # refute items.first[:created_at]
-    # refute items.last[:updated_at]
   end
 
-  # it "returns a single item" do
-  #   item = Item.create(name: "great things", description: "it is great")
-  #
-  #   get :show, id: item.id, format: :json
-  #   expect(response).to have_http_status(:success)
-  #   item = JSON.parse(response.body, symbolize_names: true)
-  #   expect(item[:name]).to eq "great things"
-  # end
-  #
-  # it "deletes an item" do
-  #   item = Item.create(name: "delete me", description: "do it")
-  #
-  #   expect(Item.count).to eq 1
-  #
-  #   delete :destroy, id: item.id, format: :json
-  #   expect(response).to have_http_status(:success)
-  #   expect(Item.count).to eq 0
-  # end
-  #
-  # it "creates an item" do
-  #   expect(Item.count).to eq 0
-  #   post :create, format: :json, post: { name: "Item", description: "this item"}
-  #   expect(response).to have_http_status(:success)
-  #
-  #   expect(Item.count).to eq 1
-  # end
+  it "returns a single idea" do
+    idea = Idea.create(title: "great idea", body: "this thing")
+
+    get :show, id: idea.id, format: :json
+    expect(response).to have_http_status(:success)
+    item = JSON.parse(response.body, symbolize_names: true)
+    expect(item[:title]).to eq "great idea"
+  end
+
+  it "deletes an idea" do
+    idea = Idea.create(title: "delete me", body: "do it")
+
+    expect(Idea.count).to eq 1
+
+    delete :destroy, id: idea.id, format: :json
+    expect(response).to have_http_status(:success)
+    expect(Idea.count).to eq 0
+  end
+
+  it "creates an idea" do
+    expect(Idea.count).to eq 0
+    post :create, format: :json, post: { title: "Idea", body: "this idea"}
+    expect(response).to have_http_status(:success)
+
+    expect(Idea.count).to eq 1
+    expect(Idea.last.title).to eq "Idea"
+  end
+
+  it "updates an idea" do
+    idea = Idea.create(title: "yoyo", body: "this is great")
+    expect(idea.quality).to eq "swill"
+    patch :update, format: :json, id: idea.id, quality: 1
+    expect(response).to have_http_status(:success)
+    expect(Idea.find(idea.id).quality).to eq "plausible"
+  end
 end

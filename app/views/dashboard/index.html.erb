@@ -10,6 +10,11 @@
 <div id="ideas"></div>
 
 <script>
+var id = ''
+var buttons = "<button class='delete'>" + 'Delete' + "</button>"
++ "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
++ "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
+
 $(document).ready(function(){
   function renderIdeas(ideas) {
     $.each(ideas, function(index, idea){
@@ -17,10 +22,8 @@ $(document).ready(function(){
         "<div id='" + idea.id + "'><h3>"
         + idea.title + "</h3><p>"
         + idea.body + "</p><p>"
-        + 'Quality: ' + idea.quality
-        + "<button class='delete'>" + 'Delete' + "</button>"
-        + "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
-        + "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
+        + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
+        + buttons
         + "</p></div>"
       )
     })
@@ -31,10 +34,8 @@ $(document).ready(function(){
       "<div id='" + idea.id + "'><h3>"
       + idea.title + "</h3><p>"
       + idea.body + "</p><p>"
-      + 'Quality: ' + idea.quality
-      + "<button class='delete'>" + 'Delete' + "</button>"
-      + "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
-      + "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
+      + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
+      + buttons
       + "</p></div>"
     )
     $("input.idea").val(null)
@@ -63,25 +64,50 @@ $(document).ready(function(){
   })
 
   $("#ideas").on("click", ".delete", function(events){
-    var id = this.closest("div").id
-    $(this).closest("div").fadeOut()
+    id = this.closest("div").id
     $.ajax({
       type: "DELETE",
       url: "/api/v1/ideas/" + id + ".json",
       success: function(){
-
+        $("#" + id).closest("div").fadeOut()
       }
     })
   });
 
   $("#ideas").on("click", ".thumbs-up", function(){
-    console.log("yo")
-    var id = this.closest("div").id
+    id = this.closest("div").id
     $.ajax({
       type: "PATCH",
+      data: { quality: 1 },
       url: "/api/v1/ideas/" + id + ".json",
       success: function(){
-        
+        $.ajax({
+          type: "GET",
+          url: "/api/v1/ideas/" + id + ".json",
+          success: function(idea) {
+            var quality = idea.quality
+            $("#" + id).children("div").text("Quality: " + quality)
+          }
+        })
+      }
+    })
+  })
+
+  $("#ideas").on("click", ".thumbs-down", function(){
+    id = this.closest("div").id
+    $.ajax({
+      type: "PATCH",
+      data: { quality: -1 },
+      url: "/api/v1/ideas/" + id + ".json",
+      success: function(){
+        $.ajax({
+          type: "GET",
+          url: "/api/v1/ideas/" + id + ".json",
+          success: function(idea) {
+            var quality = idea.quality
+            $("#" + id).children("div").text("Quality: " + quality)
+          }
+        })
       }
     })
   })

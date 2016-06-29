@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "User can see ideas" do
   scenario "User sees ideas", js: true do
+    skip
     Capybara.default_driver = :webkit
     Capybara.default_max_wait_time = 5
 
