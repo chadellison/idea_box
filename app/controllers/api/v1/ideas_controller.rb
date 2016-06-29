@@ -2,7 +2,8 @@ class Api::V1::IdeasController < Api::ApiController
   respond_to :json
 
   def index
-    respond_with Idea.order(created_at: :desc)
+    # respond_with Idea.order(created_at: :desc)
+    respond_with Idea.filter(params[:text])
   end
 
   def show

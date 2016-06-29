@@ -1,4 +1,7 @@
 <h1>Welcome To Idea Box</h1>
+Search:
+<input id="search" type="text" name="search" placeholder="Search Ideas">
+
 <p>Think outside the box after putting your ideas in one</p>
 
 <div class="new-idea">
@@ -31,16 +34,22 @@ $(document).ready(function(){
     })
   }
 
-  // searchbox = document.getElementById('searchboxID');
-    // edit = document.getElementByClass("edit")
-    // edit.addEventListener('blur', function() {
-    // var input = this.value;
-    // });
+  $("#search").keyup(function() {
+    var text = $(this).val()
+    $.ajax({
+      type: "GET",
+      url: "/api/v1/ideas.json",
+      data: { text: text },
+      success: function(ideas){
+        $("#ideas").children().remove()
+        renderIdeas(ideas)
+      }
+    })
+  });
 
   $("#ideas").on("blur", ".edit", function(){
     var title = $(this).children("h3").text()
     var body = $(this).children("p").text()
-    // var quality = $(this).siblings("div").text()
     var id = $(this).parent().attr("id")
     $.ajax({
       type: "PATCH",
@@ -54,9 +63,9 @@ $(document).ready(function(){
 
   function createIdea(idea){
     $("#ideas").prepend(
-      "<div id='" + idea.id + "' class='edit' contenteditable='true'><h3>"
+      "<div id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
       + idea.title + "</h3><p>"
-      + idea.body + "</p><p>"
+      + idea.body + "</p><p></div>"
       + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
       + buttons
       + "</p></div>"
