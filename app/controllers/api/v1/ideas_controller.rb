@@ -10,12 +10,13 @@ class Api::V1::IdeasController < Api::ApiController
   end
 
   def destroy
-    Idea.find(params[:id]).destroy
-    # respond_to do |format|
-    #   format.html { render :partial => @idea }
-    #   format.js
-    # end
-    redirect_to root_path
+    respond_with Idea.find(params[:id]).destroy
+  end
+
+  def update
+    idea = Idea.find(params[:id])
+    idea.update_quality(params[:quality])
+    respond_with
   end
 
   private

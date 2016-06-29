@@ -11,20 +11,43 @@
 
 <script>
 $(document).ready(function(){
+  function renderIdeas(ideas) {
+    $.each(ideas, function(index, idea){
+      $('#ideas').append(
+        "<div id='" + idea.id + "'><h3>"
+        + idea.title + "</h3><p>"
+        + idea.body + "</p><p>"
+        + 'Quality: ' + idea.quality
+        + "<button class='delete'>" + 'Delete' + "</button>"
+        + "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
+        + "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
+        + "</p></div>"
+      )
+    })
+  }
+
+  function createIdea(idea){
+    $("#ideas").prepend(
+      "<div id='" + idea.id + "'><h3>"
+      + idea.title + "</h3><p>"
+      + idea.body + "</p><p>"
+      + 'Quality: ' + idea.quality
+      + "<button class='delete'>" + 'Delete' + "</button>"
+      + "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
+      + "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
+      + "</p></div>"
+    )
+    $("input.idea").val(null)
+  }
+
   $.ajax({
     type: "GET",
     url: "/api/v1/ideas.json",
     success: function(ideas) {
-      $.each(ideas, function(index, idea){
-        $('#ideas').append(
-          "<div id='" + idea.id + "'><h3>"
-          + idea.title + "</h3><p>"
-          + idea.body + "</p><p>"
-          + 'Quality: ' + idea.quality + "</p></div>"
-        )
-      })
+      renderIdeas(ideas)
     },
   });
+
   $("#submit").on("click", function(){
     var title      = $("#title").val()
     var body       = $("#body").val()
@@ -34,16 +57,34 @@ $(document).ready(function(){
       url: "/api/v1/ideas.json",
       data: idea,
       success: function(idea){
-        $("#ideas").prepend(
-          "<div id='" + idea.id + "'><h3>"
-          + idea.title + "</h3><p>"
-          + idea.body + "</p><p>"
-          + 'Quality: ' + idea.quality + "</p></div>"
-        )
-        $("input.idea").val(null)
+        createIdea(idea)
       }
     })
   })
-})
 
+  $("#ideas").on("click", ".delete", function(events){
+    var id = this.closest("div").id
+    $(this).closest("div").fadeOut()
+    $.ajax({
+      type: "DELETE",
+      url: "/api/v1/ideas/" + id + ".json",
+      success: function(){
+
+      }
+    })
+  });
+
+  $("#ideas").on("click", ".thumbs-up", function(){
+    console.log("yo")
+    var id = this.closest("div").id
+    $.ajax({
+      type: "PATCH",
+      url: "/api/v1/ideas/" + id + ".json",
+      success: function(){
+        
+      }
+    })
+  })
+
+})
 </script>
