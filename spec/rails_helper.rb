@@ -8,7 +8,8 @@ require 'rspec/rails'
 require "capybara/rails"
 require 'vcr'
 require 'webmock'
-#require 'support/factory_girl'
+require 'capybara-webkit'
+require 'selenium-webdriver'
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
@@ -22,22 +23,67 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
-Shoulda::Matchers.configure do |config|
-  config.integrate do |with|
-    with.test_framework :rspec
-    with.library :rails
-  end
-end
 
-  VCR.configure do |c|
-    c.cassette_library_dir = 'spec/cassettes'
-    c.hook_into :webmock
-    c.configure_rspec_metadata!
-    c.allow_http_connections_when_no_cassette = true
+  Shoulda::Matchers.configure do |config|
+    config.integrate do |with|
+      with.test_framework :rspec
+      with.library :rails
+    end
   end
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction # rollleaner.clean_with :truncation  # clean DB of any leftover back transactions between each test
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  # config.around(:each, js: true) do |example|
+  #   DatabaseCleaner.strategy = :truncation
+  #   ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+  #   example.run
+  #   ActiveRecord::Base.shared_connection = nil
+  # end
+  #
+  # class ActiveRecord::Base
+  #   mattr_accessor :shared_connection
+  #   @shared_connection = nil
+  #
+  #   def self.connection
+  #     @shared_connection || retrieve_connection
+  #   end
+  # end
+
+  module WaitForAjax
+    def wait_for_ajax
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        loop until finished_all_ajax_requests?
+      end
+    end
+
+    def finished_all_ajax_requests?
+      page.evaluate_script('jQuery.active').zero?
+    end
+  end
+
+  RSpec.configure do |config|
+    config.include WaitForAjax, type: :feature
+  end
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, :js => true) do
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do

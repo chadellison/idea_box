@@ -1,7 +1,11 @@
 require "rails_helper"
 
 RSpec.feature "User can see ideas" do
-  scenario "User sees ideas" do
+  scenario "User sees ideas", js: true do
+    skip
+    Capybara.default_driver = :webkit
+    Capybara.default_max_wait_time = 5
+
     idea = Idea.create(title: "great things", body: "things that are great")
 
     visit root_path

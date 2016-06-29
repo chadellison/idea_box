@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "user can remove ideas" do
   scenario "users no longer sees the ideas" do
+    skip
     idea1 = Idea.create(title: "This idea", body: "play in the mud")
     idea2 = Idea.create(title: "rolling on the ground", body: "go roll on the ground")
 

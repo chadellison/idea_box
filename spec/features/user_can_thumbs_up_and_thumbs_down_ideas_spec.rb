@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "user can thumbs up an idea" do
   scenario "user sees adjusted idea quality" do
+    skip
     idea1 = Idea.create(title: "my idea", body: "the body of my idea")
     idea2 = Idea.create(title: "another idea", body: "a thing!")
 
