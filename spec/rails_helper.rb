@@ -31,17 +31,17 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction # rollleaner.clean_with :truncation  # clean DB of any leftover back transactions between each test
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+  # config.before(:suite) do
+  #   DatabaseCleaner.strategy = :transaction # rollleaner.clean_with :truncation  # clean DB of any leftover back transactions between each test
+  # end
+  #
+  # config.before(:each) do
+  #   DatabaseCleaner.start
+  # end
+  #
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
 
   # config.around(:each, js: true) do |example|
   #   DatabaseCleaner.strategy = :truncation

@@ -1,24 +1,15 @@
 require "rails_helper"
 
 RSpec.feature "user can remove ideas" do
-  scenario "users no longer sees the ideas" do
-    skip
-    idea1 = Idea.create(title: "This idea", body: "play in the mud")
-    idea2 = Idea.create(title: "rolling on the ground", body: "go roll on the ground")
-
+  scenario "users no longer sees the ideas", js: true do
     visit root_path
 
-    expect(page).to have_content "This idea"
-    expect(page).to have_content "play in the mud"
-    expect(page).to have_content "rolling on the ground"
-    expect(page).to have_content "go roll on the ground"
+    expect(page).to have_content "this new idea"
+    expect(page).to have_content "don't be too clever"
 
-    within("##{idea1.id}") do
-      click_on "Delete"
-    end
-    expect(page).not_to have_content "This idea"
-    expect(page).not_to have_content "play in the mud"
+    click_on "Delete"
 
-    expect(page).to have_content "rolling on the ground"
+    expect(page).not_to have_content "This new idea"
+    expect(page).not_to have_content "don't be too clever"
   end
 end
