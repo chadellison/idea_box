@@ -2,9 +2,11 @@
 <p>Think outside the box after putting your ideas in one</p>
 
 <div class="new-idea">
-    <input class="idea" id="title" placeholder="title" type="text">
-    <input class="idea" id="body" placeholder="idea" type="text">
-    <input id="submit" type="button" name="submit" value="Save">
+  Title:
+  <input class="idea" id="title" placeholder="title" type="text"><br>
+  Idea:
+  <input class="idea" id="body" placeholder="idea" type="text"><br>
+  <input id="submit" type="button" name="submit" value="Save">
 </div>
 
 <div id="ideas"></div>
@@ -12,8 +14,8 @@
 <script>
 var id = ''
 var buttons = "<button class='delete'>" + 'Delete' + "</button>"
-+ "<button class='thumbs-up'>" + 'thumbs up' + "</button>"
-+ "<button class='thumbs-down'>" + 'thumbs down' + "</button>"
++ "<button class='thumbs up'>" + 'thumbs up' + "</button>"
++ "<button class='thumbs down'>" + 'thumbs down' + "</button>"
 
 $(document).ready(function(){
   function renderIdeas(ideas) {
@@ -74,30 +76,18 @@ $(document).ready(function(){
     })
   });
 
-  $("#ideas").on("click", ".thumbs-up", function(){
+  $("#ideas").on("click", ".thumbs", function(){
     id = this.closest("div").id
-    $.ajax({
-      type: "PATCH",
-      data: { quality: 1 },
-      url: "/api/v1/ideas/" + id + ".json",
-      success: function(){
-        $.ajax({
-          type: "GET",
-          url: "/api/v1/ideas/" + id + ".json",
-          success: function(idea) {
-            var quality = idea.quality
-            $("#" + id).children("div").text("Quality: " + quality)
-          }
-        })
-      }
-    })
-  })
 
-  $("#ideas").on("click", ".thumbs-down", function(){
-    id = this.closest("div").id
+    if($(this).hasClass("up")) {
+      var amount = 1
+    } else {
+      var amount = -1
+    }
+
     $.ajax({
       type: "PATCH",
-      data: { quality: -1 },
+      data: { quality: amount },
       url: "/api/v1/ideas/" + id + ".json",
       success: function(){
         $.ajax({
