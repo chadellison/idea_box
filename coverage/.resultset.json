@@ -10,7 +10,6 @@
         1,
         null,
         1,
-        null,
         4,
         null,
         null,
@@ -54,6 +53,15 @@
         1,
         null
       ],
+      "/Users/charlesellison/turing/4module/projects/idea_box/app/controllers/api/v1/qualities_controller.rb": [
+        1,
+        1,
+        null,
+        1,
+        1,
+        null,
+        null
+      ],
       "/Users/charlesellison/turing/4module/projects/idea_box/app/models/idea.rb": [
         1,
         1,
@@ -81,6 +89,6 @@
         null
       ]
     },
-    "timestamp": 1467237952
+    "timestamp": 1467245187
   }
 }
