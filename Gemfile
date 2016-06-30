@@ -32,6 +32,7 @@ group :development, :test do
   gem 'mocha'
   gem 'simplecov', :require => false
   gem 'turbolinks'
+  gem 'faker'
 end
 
 group :development do
