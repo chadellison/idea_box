@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.feature "User can add an idea" do
   scenario "User sees new idea", js: true do
+    skip
     visit root_path
 
     expect(page).not_to have_content "this new idea"

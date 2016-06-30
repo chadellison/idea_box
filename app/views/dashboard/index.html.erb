@@ -1,6 +1,5 @@
 <div class="nav">
   <ul>
-    <li><%= link_to "Home", root_path %></li>
     <li><a id="genius" href="#">Genius</a></li>
     <li><a id="plausible" href="#">Plausible</a></li>
     <li><a id="swill" href="#">Swill</a></li>
@@ -11,7 +10,7 @@
 
 <h1>Welcome To Idea Box</h1>
 
-<p class="tag-line">Think outside the box after putting your ideas in one</p>
+<p class="tag-line">Put your ideas in a box, not your head</p>
 
 <div class="new-idea">
   Title:<br>
@@ -24,16 +23,15 @@
 <div id="ideas"></div>
 
 <script>
-var id = ''
-var buttons = "<button class='delete'>" + 'Delete' + "</button>"
-+ "<button class='thumbs down'>" + 'thumbs down' + "</button>"
-+ "<button class='thumbs up'>" + 'thumbs up' + "</button>"
+  var id = ''
+  var buttons = "<button class='delete'>" + 'Delete' + "</button>"
+  + "<button class='thumbs down'>" + 'thumbs down' + "</button>"
+  + "<button class='thumbs up'>" + 'thumbs up' + "</button>"
 
-$(document).ready(function(){
   function renderIdeas(ideas) {
     $.each(ideas, function(index, idea){
       $('#ideas').append(
-        "<div id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
+        "<div class='each-idea' id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
         + idea.title + "</h3><p>"
         + idea.body + "</p><p></div>"
         + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
@@ -42,46 +40,6 @@ $(document).ready(function(){
       )
     })
   }
-
-  $("#search").keyup(function() {
-    var text = $(this).val()
-    $.ajax({
-      type: "GET",
-      url: "/api/v1/ideas.json",
-      data: { text: text },
-      success: function(ideas){
-        $("#ideas").children().remove()
-        renderIdeas(ideas)
-      }
-    })
-  });
-
-  $("#ideas").on("blur", ".edit", function(){
-    var title = $(this).children("h3").text()
-    var body = $(this).children("p").text()
-    var id = $(this).parent().attr("id")
-    $.ajax({
-      type: "PATCH",
-      url: "/api/v1/ideas/" + id + ".json",
-      data: { idea: { title: title, body: body }},
-      success: function(){
-
-      }
-    })
-  })
-
-  function createIdea(idea){
-    $("#ideas").prepend(
-      "<div id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
-      + idea.title + "</h3><p>"
-      + idea.body + "</p><p></div>"
-      + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
-      + buttons
-      + "</p></div>"
-    )
-    $("input.idea").val(null)
-  }
-  fetchIdeas()
 
   function fetchIdeas(){
     $.ajax({
@@ -93,90 +51,7 @@ $(document).ready(function(){
     });
   }
 
-  $("#submit").on("click", function(){
-    var title = $("#title").val()
-    var body  = $("#body").val()
-    var idea  = { title: title, body: body }
-    $.ajax({
-      type: "POST",
-      url: "/api/v1/ideas.json",
-      data: {idea: idea},
-      success: function(idea){
-        createIdea(idea)
-      }
-    })
-  })
-
-  $("#ideas").on("click", ".delete", function(events){
-    id = this.closest("div").id
-    $.ajax({
-      type: "DELETE",
-      url: "/api/v1/ideas/" + id + ".json",
-      success: function(){
-        $("#" + id).closest("div").fadeOut()
-      }
-    })
-  });
-
   function removeIdeas(){
     $("#ideas").children().remove()
   }
-
-  function filterQuality(quality){
-    $.ajax({
-      type: "GET",
-      data: {quality: quality},
-      url: "/api/v1/qualities.json",
-      success: function(ideas){
-        // $("#ideas").children().remove()
-        removeIdeas()
-        renderIdeas(ideas)
-      }
-    })
-  }
-
-  $("#genius").on("click", function(){
-    filterQuality("2")
-  })
-
-  $("#plausible").on("click", function(){
-    filterQuality("1")
-  })
-
-  $("#swill").on("click", function(){
-    filterQuality("0")
-  })
-
-  $("#all").on("click", function(){
-    removeIdeas()
-    fetchIdeas()
-  })
-
-  $("#ideas").on("click", ".thumbs", function(){
-    id = this.closest("div").id
-
-    if($(this).hasClass("up")) {
-      var amount = 1
-    } else {
-      var amount = -1
-    }
-
-    $.ajax({
-      type: "PATCH",
-      data: { quality: amount },
-      url: "/api/v1/ideas/" + id + ".json",
-      success: function(){
-        $.ajax({
-          type: "GET",
-          url: "/api/v1/ideas/" + id + ".json",
-          success: function(idea) {
-            var quality = idea.quality
-            $("#" + id).children("div").last().text("Quality: " + quality)
-          }
-        })
-      }
-    })
-  })
-
-})
 </script>

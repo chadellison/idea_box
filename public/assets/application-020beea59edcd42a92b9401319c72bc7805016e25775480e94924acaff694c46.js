@@ -12360,6 +12360,160 @@ return jQuery;
   };
 
 }).call(this);
+$(document).ready(function(){
+  function addIdea(idea){
+    $.ajax({
+      type: "POST",
+      url: "/api/v1/ideas.json",
+      data: {idea: idea},
+      success: function(idea){
+        createIdea(idea)
+      }
+    })
+  }
+
+  $("#submit").on("click", function(){
+    var title = $("#title").val()
+    var body  = $("#body").val()
+    var idea  = { title: title, body: body }
+    addIdea(idea)
+  })
+
+  function createIdea(idea){
+    $("#ideas").prepend(
+      "<div class='each-idea' id='" + idea.id + "'><div class='edit' contenteditable='true'><h3>"
+      + idea.title + "</h3><p>"
+      + idea.body + "</p><p></div>"
+      + "<div class='quality'>" + 'Quality: ' + idea.quality + "</div>"
+      + buttons
+      + "</p></div>"
+    )
+    $("input.idea").val(null)
+  }
+})
+;
+$(document).ready(function(){
+  function deleteIdea(id){
+    $.ajax({
+      type: "DELETE",
+      url: "/api/v1/ideas/" + id + ".json",
+      success: function(){
+        $("#" + id).closest("div").fadeOut()
+      }
+    })
+  }
+
+  $("#ideas").on("click", ".delete", function(events){
+    id = this.closest("div").id
+    deleteIdea(id)
+  });
+})
+;
+$(document).ready(function(){
+  fetchIdeas()
+})
+;
+$(document).ready(function(){
+  function editIdea(id, title, body){
+    $.ajax({
+      type: "PATCH",
+      url: "/api/v1/ideas/" + id + ".json",
+      data: { idea: { title: title, body: body }},
+      success: function(){
+
+      }
+    })
+  }
+
+  $("#ideas").on("blur", ".edit", function(){
+    var id = $(this).parent().attr("id")
+    var title = $(this).children("h3").text()
+    var body = $(this).children("p").text()
+    editIdea(id, title, body)
+  })
+})
+;
+$(document).ready(function(){
+  function filterQuality(quality){
+    $.ajax({
+      type: "GET",
+      data: {quality: quality},
+      url: "/api/v1/qualities.json",
+      success: function(ideas){
+        removeIdeas()
+        renderIdeas(ideas)
+      }
+    })
+  }
+
+  $("#genius").on("click", function(){
+    filterQuality("2")
+  })
+
+  $("#plausible").on("click", function(){
+    filterQuality("1")
+  })
+
+  $("#swill").on("click", function(){
+    filterQuality("0")
+  })
+
+  $("#all").on("click", function(){
+    removeIdeas()
+    fetchIdeas()
+  })
+})
+;
+$(document).ready(function(){
+  function filterByText(text){
+    $.ajax({
+      type: "GET",
+      url: "/api/v1/ideas.json",
+      data: { text: text },
+      success: function(ideas){
+        removeIdeas()
+        renderIdeas(ideas)
+      }
+    })
+  }
+
+  $("#search").keyup(function() {
+    var text = $(this).val()
+    filterByText(text)
+  });
+})
+;
+$(document).ready(function(){
+  function updateIdea(id, amount){
+    $.ajax({
+      type: "PATCH",
+      data: { quality: amount },
+      url: "/api/v1/ideas/" + id + ".json",
+      success: function(){
+        $.ajax({
+          type: "GET",
+          url: "/api/v1/ideas/" + id + ".json",
+          success: function(idea) {
+            var quality = idea.quality
+            $("#" + id).children("div").last().text("Quality: " + quality)
+          }
+        })
+      }
+    })
+  }
+
+  $("#ideas").on("click", ".thumbs", function(){
+    id = this.closest("div").id
+
+    if($(this).hasClass("up")) {
+      var amount = 1
+    } else {
+      var amount = -1
+    }
+    updateIdea(id, amount)
+  })
+})
+;
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //

@@ -31,34 +31,6 @@ RSpec.configure do |config|
     end
   end
 
-  # config.before(:suite) do
-  #   DatabaseCleaner.strategy = :transaction # rollleaner.clean_with :truncation  # clean DB of any leftover back transactions between each test
-  # end
-  #
-  # config.before(:each) do
-  #   DatabaseCleaner.start
-  # end
-  #
-  # config.after(:each) do
-  #   DatabaseCleaner.clean
-  # end
-
-  # config.around(:each, js: true) do |example|
-  #   DatabaseCleaner.strategy = :truncation
-  #   ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
-  #   example.run
-  #   ActiveRecord::Base.shared_connection = nil
-  # end
-  #
-  # class ActiveRecord::Base
-  #   mattr_accessor :shared_connection
-  #   @shared_connection = nil
-  #
-  #   def self.connection
-  #     @shared_connection || retrieve_connection
-  #   end
-  # end
-
   module WaitForAjax
     def wait_for_ajax
       Timeout.timeout(Capybara.default_max_wait_time) do
