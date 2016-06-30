@@ -8,6 +8,7 @@ ul {
 
 li {
   float: left;
+  font-family: Sans-serif;
 }
 
 li a {
@@ -28,4 +29,5 @@ li a:hover {
   margin-left: 20px;
   width: 200px;
   height: 14px;
+  font-family: Sans-serif;
 }
