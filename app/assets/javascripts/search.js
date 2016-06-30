@@ -7,6 +7,9 @@ $(document).ready(function(){
       success: function(ideas){
         removeIdeas()
         renderIdeas(ideas)
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }

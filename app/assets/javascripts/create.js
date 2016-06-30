@@ -6,6 +6,9 @@ $(document).ready(function(){
       data: {idea: idea},
       success: function(idea){
         createIdea(idea)
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }

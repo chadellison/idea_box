@@ -3,16 +3,15 @@ function sortByQuality(divs){
   var plausible = []
   var genius = []
 
-  for (var i = 0; i < divs.length; i++){
-
-    if($(divs[i]).children(".quality").text() === "Quality: swill"){
-      swill.push(divs[i])
-    } else if($(divs[i]).children(".quality").text() === "Quality: plausible"){
-      plausible.push(divs[i])
-    } else if($(divs[i]).children(".quality").text() === "Quality: genius"){
-      genius.push(divs[i])
+  $.each(divs, function(index, div){
+    if($(div).children(".quality").text() === "Quality: swill"){
+      swill.push(div)
+    } else if($(div).children(".quality").text() === "Quality: plausible"){
+      plausible.push(div)
+    } else if($(div).children(".quality").text() === "Quality: genius"){
+      genius.push(div)
     }
-  }
+  })
   return swill.concat(plausible).concat(genius)
 }
 

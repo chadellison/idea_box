@@ -4,17 +4,36 @@ $(document).ready(function(){
       type: "PATCH",
       data: { quality: amount },
       url: "/api/v1/ideas/" + id + ".json",
-      success: function(){
-        $.ajax({
-          type: "GET",
-          url: "/api/v1/ideas/" + id + ".json",
-          success: function(idea) {
-            var quality = idea.quality
-            $("#" + id).children("div").last().text("Quality: " + quality)
-          }
-        })
+      success: newQuality(id, amount),
+      error: function(errorBody){
+        alert('error');
       }
     })
+  }
+
+  function newQuality(id, amount) {
+    var oldQuality = $("#" + id).children("div").last()
+    if(amount === 1) {
+      increment(oldQuality)
+    } else {
+      decrement(oldQuality)
+    }
+  }
+
+  function increment(quality){
+    if(quality.text() === "Quality: swill") {
+      quality.text("Quality: plausible")
+    } else {
+      quality.text("Quality: genius")
+    }
+  }
+
+  function decrement(quality){
+    if(quality.text() === "Quality: genius") {
+      quality.text("Quality: plausible")
+    } else {
+      quality.text("Quality: swill")
+    }
   }
 
   $("#ideas").on("click", ".thumbs", function(){

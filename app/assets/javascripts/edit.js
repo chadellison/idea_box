@@ -6,6 +6,9 @@ $(document).ready(function(){
       data: { idea: { title: title, body: body }},
       success: function(){
 
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }

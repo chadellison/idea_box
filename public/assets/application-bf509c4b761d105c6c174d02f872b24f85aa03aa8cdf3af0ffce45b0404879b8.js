@@ -12368,6 +12368,9 @@ $(document).ready(function(){
       data: {idea: idea},
       success: function(idea){
         createIdea(idea)
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }
@@ -12399,6 +12402,9 @@ $(document).ready(function(){
       url: "/api/v1/ideas/" + id + ".json",
       success: function(){
         $("#" + id).closest("div").fadeOut()
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }
@@ -12421,6 +12427,9 @@ $(document).ready(function(){
       data: { idea: { title: title, body: body }},
       success: function(){
 
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }
@@ -12442,6 +12451,9 @@ $(document).ready(function(){
       success: function(ideas){
         removeIdeas()
         renderIdeas(ideas)
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }
@@ -12473,6 +12485,9 @@ $(document).ready(function(){
       success: function(ideas){
         removeIdeas()
         renderIdeas(ideas)
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }
@@ -12488,16 +12503,15 @@ function sortByQuality(divs){
   var plausible = []
   var genius = []
 
-  for (var i = 0; i < divs.length; i++){
-
-    if($(divs[i]).children(".quality").text() === "Quality: swill"){
-      swill.push(divs[i])
-    } else if($(divs[i]).children(".quality").text() === "Quality: plausible"){
-      plausible.push(divs[i])
-    } else if($(divs[i]).children(".quality").text() === "Quality: genius"){
-      genius.push(divs[i])
+  $.each(divs, function(index, div){
+    if($(div).children(".quality").text() === "Quality: swill"){
+      swill.push(div)
+    } else if($(div).children(".quality").text() === "Quality: plausible"){
+      plausible.push(div)
+    } else if($(div).children(".quality").text() === "Quality: genius"){
+      genius.push(div)
     }
-  }
+  })
   return swill.concat(plausible).concat(genius)
 }
 
@@ -12521,17 +12535,36 @@ $(document).ready(function(){
       type: "PATCH",
       data: { quality: amount },
       url: "/api/v1/ideas/" + id + ".json",
-      success: function(){
-        $.ajax({
-          type: "GET",
-          url: "/api/v1/ideas/" + id + ".json",
-          success: function(idea) {
-            var quality = idea.quality
-            $("#" + id).children("div").last().text("Quality: " + quality)
-          }
-        })
+      success: newQuality(id, amount),
+      error: function(errorBody){
+        alert('error');
       }
     })
+  }
+
+  function newQuality(id, amount) {
+    var oldQuality = $("#" + id).children("div").last()
+    if(amount === 1) {
+      increment(oldQuality)
+    } else {
+      decrement(oldQuality)
+    }
+  }
+
+  function increment(quality){
+    if(quality.text() === "Quality: swill") {
+      quality.text("Quality: plausible")
+    } else {
+      quality.text("Quality: genius")
+    }
+  }
+
+  function decrement(quality){
+    if(quality.text() === "Quality: genius") {
+      quality.text("Quality: plausible")
+    } else {
+      quality.text("Quality: swill")
+    }
   }
 
   $("#ideas").on("click", ".thumbs", function(){
