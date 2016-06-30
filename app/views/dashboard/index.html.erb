@@ -1,14 +1,23 @@
-<h1>Welcome To Idea Box</h1>
-Search:
-<input id="search" type="text" name="search" placeholder="Search Ideas">
+<div class="nav">
+  <ul>
+    <li><%= link_to "Home", root_path %></li>
+    <li><a id="genius" href="#">Genius</a></li>
+    <li><a id="plausible" href="#">Plausible</a></li>
+    <li><a id="swill" href="#">Swill</a></li>
+    <li><a id="all" href="#">All Ideas</a></li>
+    <li><input id="search" type="text" name="search" placeholder="Search Ideas"></a></li>
+  </ul>
+</div>
 
-<p>Think outside the box after putting your ideas in one</p>
+<h1>Welcome To Idea Box</h1>
+
+<p class="tag-line">Think outside the box after putting your ideas in one</p>
 
 <div class="new-idea">
-  Title:
-  <input class="idea" id="title" placeholder="title" type="text"><br>
-  Idea:
-  <input class="idea" id="body" placeholder="idea" type="text"><br>
+  Title:<br>
+  <input class="idea" id="title" type="text"><br>
+  Idea:<br>
+  <input class="idea" id="body" type="text"><br>
   <input id="submit" type="button" name="submit" value="Save">
 </div>
 
@@ -17,8 +26,8 @@ Search:
 <script>
 var id = ''
 var buttons = "<button class='delete'>" + 'Delete' + "</button>"
-+ "<button class='thumbs up'>" + 'thumbs up' + "</button>"
 + "<button class='thumbs down'>" + 'thumbs down' + "</button>"
++ "<button class='thumbs up'>" + 'thumbs up' + "</button>"
 
 $(document).ready(function(){
   function renderIdeas(ideas) {
@@ -72,19 +81,22 @@ $(document).ready(function(){
     )
     $("input.idea").val(null)
   }
+  fetchIdeas()
 
-  $.ajax({
-    type: "GET",
-    url: "/api/v1/ideas.json",
-    success: function(ideas) {
-      renderIdeas(ideas)
-    },
-  });
+  function fetchIdeas(){
+    $.ajax({
+      type: "GET",
+      url: "/api/v1/ideas.json",
+      success: function(ideas) {
+        renderIdeas(ideas)
+      },
+    });
+  }
 
   $("#submit").on("click", function(){
-    var title      = $("#title").val()
-    var body       = $("#body").val()
-    var idea = { title: title, body: body }
+    var title = $("#title").val()
+    var body  = $("#body").val()
+    var idea  = { title: title, body: body }
     $.ajax({
       type: "POST",
       url: "/api/v1/ideas.json",
@@ -105,6 +117,40 @@ $(document).ready(function(){
       }
     })
   });
+
+  function removeIdeas(){
+    $("#ideas").children().remove()
+  }
+
+  function filterQuality(quality){
+    $.ajax({
+      type: "GET",
+      data: {quality: quality},
+      url: "/api/v1/qualities.json",
+      success: function(ideas){
+        // $("#ideas").children().remove()
+        removeIdeas()
+        renderIdeas(ideas)
+      }
+    })
+  }
+
+  $("#genius").on("click", function(){
+    filterQuality("2")
+  })
+
+  $("#plausible").on("click", function(){
+    filterQuality("1")
+  })
+
+  $("#swill").on("click", function(){
+    filterQuality("0")
+  })
+
+  $("#all").on("click", function(){
+    removeIdeas()
+    fetchIdeas()
+  })
 
   $("#ideas").on("click", ".thumbs", function(){
     id = this.closest("div").id

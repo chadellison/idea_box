@@ -1,0 +1,132 @@
+#body {
+  height: 100px;
+}
+
+.idea {
+  width: 300px;
+  border: 2px solid #ccf6ff;
+}
+
+.new-idea {
+  background-color: #e0e0eb;
+  width: 316px;
+  padding: 15px;
+  padding-left: 2%;
+  height: 190px;
+}
+
+#ideas {
+  padding: 2px;
+  padding-left: 2%;
+  padding-right: 2%;
+  background-color: #ebf0fa;
+}
+
+h1 {
+  padding-left: 2%;
+}
+
+.tag-line {
+  padding-left: 2%;
+}
+
+#submit {
+  float: left;
+  background-color: #0092b3;
+  color: white;
+  font-size: 10px;
+  border: none;
+  outline: none;
+  margin-top: 5px;
+}
+
+#submit:hover:not(.active) {
+  background-color: #00bbe6;
+}
+
+#submit:active {
+  transform: translateY(2px);
+}
+
+.delete {
+  float: left;
+  background-color: #b30000;
+  color: white;
+  font-size: 10px;
+  border: none;
+  outline: none;
+  margin-top: 5px;
+}
+
+.delete:hover:not(.active) {
+  background-color: #cc0000;
+}
+
+.delete:active {
+  transform: translateY(2px);
+}
+
+.thumbs {
+  margin-left: 5px;
+  background-color: #0092b3;
+  color: white;
+  font-size: 10px;
+  border: none;
+  outline: none;
+  margin-top: 5px;
+}
+
+.thumbs:hover:not(.active) {
+  background-color: #00bbe6;
+}
+
+.thumbs:active {
+  transform: translateY(2px);
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #111;
+}
+
+#search {
+  margin-top: 13px;
+  margin-left: 20px;
+  width: 200px;
+  height: 14px;
+}
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+
+
+ */
+
