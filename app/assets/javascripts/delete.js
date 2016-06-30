@@ -5,6 +5,9 @@ $(document).ready(function(){
       url: "/api/v1/ideas/" + id + ".json",
       success: function(){
         $("#" + id).closest("div").fadeOut()
+      },
+      error: function(errorBody){
+        alert('error');
       }
     })
   }

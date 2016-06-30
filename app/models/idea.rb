@@ -11,7 +11,7 @@ class Idea < ActiveRecord::Base
 
   def self.filter(text = "")
     ids = self.where("title like ?", "%#{text}%").pluck(:id) +
-    self.where("body like ?", "%#{text}%").pluck(:id).uniq #order(created_at: :desc)
+    self.where("body like ?", "%#{text}%").pluck(:id).uniq
     self.where(id: ids).order(created_at: :desc)
   end
 end
